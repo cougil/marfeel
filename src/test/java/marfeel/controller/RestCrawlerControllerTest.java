@@ -18,6 +18,8 @@ import marfeel.controller.dto.Site;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.http.MediaType;
@@ -39,6 +41,9 @@ public class RestCrawlerControllerTest {
 	private MockMvc mvc;
 	private RestTemplate restTemplate;
 	private String json;
+	private static final Logger log = LoggerFactory
+			.getLogger(RestCrawlerControllerTest.class);
+
 
 	@Before
 	public void setUp() throws IOException {
@@ -49,7 +54,7 @@ public class RestCrawlerControllerTest {
 
 		Path path = FileSystems.getDefault().getPath("target/test-classes",
 				"sites.json");
-		// System.out.println(path + " " + path.toAbsolutePath());
+		// log.debug(path + " " + path.toAbsolutePath());
 
 		byte[] bytes = Files.readAllBytes(path);
 		this.json = new String(bytes);
@@ -84,7 +89,7 @@ public class RestCrawlerControllerTest {
 		assertTrue(sites.length > 0);
 
 		for (Site site : sites) {
-			System.out.println(site);
+			log.debug(site.toString());
 			assertTrue(new URL("http://" + site.getUrl()) != null);
 			assertTrue(site.getRank() > 0);
 		}
